@@ -53,7 +53,7 @@ def gaussian(x, amp, center, fwhm):
             Evaluated Gaussian at x
     """
     sigma = fwhm / (2.0 * np.sqrt(2.0 * np.log(2.0)))
-    return amp * np.exp(-0.5 * (x - center) ** 2.0 / (2.0 * sigma**2.0))
+    return amp * np.exp(-(x - center) ** 2.0 / (2.0 * sigma**2.0))
 
 
 class Model:
