@@ -31,53 +31,53 @@
 <text text-anchor="middle" x="103" y="-66.45" font-family="Times,serif" font-size="14.00">~</text>
 <text text-anchor="middle" x="103" y="-49.2" font-family="Times,serif" font-size="14.00">Data</text>
 </g>
-<!-- pred_spectrum -->
+<!-- noise -->
 <g id="node2" class="node">
+<title>noise</title>
+<path fill="lightgrey" stroke="black" d="M164,-334.87C164,-334.87 134,-334.87 134,-334.87 128,-334.87 122,-328.87 122,-322.87 122,-322.87 122,-287.12 122,-287.12 122,-281.12 128,-275.12 134,-275.12 134,-275.12 164,-275.12 164,-275.12 170,-275.12 176,-281.12 176,-287.12 176,-287.12 176,-322.87 176,-322.87 176,-328.87 170,-334.87 164,-334.87"/>
+<text text-anchor="middle" x="149" y="-317.57" font-family="Times,serif" font-size="14.00">noise</text>
+<text text-anchor="middle" x="149" y="-300.32" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="149" y="-283.07" font-family="Times,serif" font-size="14.00">Data</text>
+</g>
+<!-- pred_spectrum -->
+<g id="node4" class="node">
 <title>pred_spectrum</title>
 <ellipse fill="lightgrey" stroke="black" cx="103" cy="-179.25" rx="87.15" ry="42.25"/>
 <text text-anchor="middle" x="103" y="-191.82" font-family="Times,serif" font-size="14.00">pred_spectrum</text>
 <text text-anchor="middle" x="103" y="-174.57" font-family="Times,serif" font-size="14.00">~</text>
 <text text-anchor="middle" x="103" y="-157.32" font-family="Times,serif" font-size="14.00">Normal</text>
 </g>
-<!-- pred_spectrum&#45;&gt;spectrum -->
+<!-- noise&#45;&gt;pred_spectrum -->
 <g id="edge1" class="edge">
-<title>pred_spectrum&#45;&gt;spectrum</title>
-<path fill="none" stroke="black" d="M103,-136.52C103,-136.52 103,-112.74 103,-112.74"/>
-<polygon fill="black" stroke="black" points="106.5,-112.74 103,-102.74 99.5,-112.74 106.5,-112.74"/>
+<title>noise&#45;&gt;pred_spectrum</title>
+<path fill="none" stroke="black" d="M149,-274.88C149,-274.88 149,-226.9 149,-226.9"/>
+<polygon fill="black" stroke="black" points="152.5,-226.9 149,-216.9 145.5,-226.9 152.5,-226.9"/>
 </g>
 <!-- velocity -->
 <g id="node3" class="node">
 <title>velocity</title>
-<path fill="lightgrey" stroke="black" d="M126.75,-455.37C126.75,-455.37 79.25,-455.37 79.25,-455.37 73.25,-455.37 67.25,-449.37 67.25,-443.37 67.25,-443.37 67.25,-407.62 67.25,-407.62 67.25,-401.62 73.25,-395.62 79.25,-395.62 79.25,-395.62 126.75,-395.62 126.75,-395.62 132.75,-395.62 138.75,-401.62 138.75,-407.62 138.75,-407.62 138.75,-443.37 138.75,-443.37 138.75,-449.37 132.75,-455.37 126.75,-455.37"/>
-<text text-anchor="middle" x="103" y="-438.07" font-family="Times,serif" font-size="14.00">velocity</text>
-<text text-anchor="middle" x="103" y="-420.82" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="103" y="-403.57" font-family="Times,serif" font-size="14.00">Data</text>
+<path fill="lightgrey" stroke="black" d="M126.75,-563.5C126.75,-563.5 79.25,-563.5 79.25,-563.5 73.25,-563.5 67.25,-557.5 67.25,-551.5 67.25,-551.5 67.25,-515.75 67.25,-515.75 67.25,-509.75 73.25,-503.75 79.25,-503.75 79.25,-503.75 126.75,-503.75 126.75,-503.75 132.75,-503.75 138.75,-509.75 138.75,-515.75 138.75,-515.75 138.75,-551.5 138.75,-551.5 138.75,-557.5 132.75,-563.5 126.75,-563.5"/>
+<text text-anchor="middle" x="103" y="-546.2" font-family="Times,serif" font-size="14.00">velocity</text>
+<text text-anchor="middle" x="103" y="-528.95" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="103" y="-511.7" font-family="Times,serif" font-size="14.00">Data</text>
 </g>
 <!-- velocity&#45;&gt;pred_spectrum -->
 <g id="edge2" class="edge">
 <title>velocity&#45;&gt;pred_spectrum</title>
-<path fill="none" stroke="black" d="M91.08,-395.3C91.08,-395.3 91.08,-232.75 91.08,-232.75"/>
-<polygon fill="black" stroke="black" points="94.58,-232.75 91.08,-222.75 87.58,-232.75 94.58,-232.75"/>
+<path fill="none" stroke="black" d="M85.5,-503.41C85.5,-503.41 85.5,-232.46 85.5,-232.46"/>
+<polygon fill="black" stroke="black" points="89,-232.46 85.5,-222.46 82,-232.46 89,-232.46"/>
 </g>
 <!-- velocity&#45;&gt;pred_spectrum -->
-<g id="edge3" class="edge">
-<title>velocity&#45;&gt;pred_spectrum</title>
-<path fill="none" stroke="black" d="M114.92,-395.3C114.92,-395.3 114.92,-232.75 114.92,-232.75"/>
-<polygon fill="black" stroke="black" points="118.42,-232.75 114.92,-222.75 111.42,-232.75 118.42,-232.75"/>
-</g>
-<!-- noise -->
-<g id="node4" class="node">
-<title>noise</title>
-<path fill="lightgrey" stroke="black" d="M63,-563.5C63,-563.5 33,-563.5 33,-563.5 27,-563.5 21,-557.5 21,-551.5 21,-551.5 21,-515.75 21,-515.75 21,-509.75 27,-503.75 33,-503.75 33,-503.75 63,-503.75 63,-503.75 69,-503.75 75,-509.75 75,-515.75 75,-515.75 75,-551.5 75,-551.5 75,-557.5 69,-563.5 63,-563.5"/>
-<text text-anchor="middle" x="48" y="-546.2" font-family="Times,serif" font-size="14.00">noise</text>
-<text text-anchor="middle" x="48" y="-528.95" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="48" y="-511.7" font-family="Times,serif" font-size="14.00">Data</text>
-</g>
-<!-- noise&#45;&gt;pred_spectrum -->
 <g id="edge4" class="edge">
-<title>noise&#45;&gt;pred_spectrum</title>
-<path fill="none" stroke="black" d="M44.12,-503.41C44.12,-503.41 44.12,-222.42 44.12,-222.42"/>
-<polygon fill="black" stroke="black" points="47.63,-222.42 44.13,-212.42 40.63,-222.42 47.63,-222.42"/>
+<title>velocity&#45;&gt;pred_spectrum</title>
+<path fill="none" stroke="black" d="M103.75,-503.41C103.75,-503.41 103.75,-233.33 103.75,-233.33"/>
+<polygon fill="black" stroke="black" points="107.25,-233.33 103.75,-223.33 100.25,-233.33 107.25,-233.33"/>
+</g>
+<!-- pred_spectrum&#45;&gt;spectrum -->
+<g id="edge3" class="edge">
+<title>pred_spectrum&#45;&gt;spectrum</title>
+<path fill="none" stroke="black" d="M103,-136.52C103,-136.52 103,-112.74 103,-112.74"/>
+<polygon fill="black" stroke="black" points="106.5,-112.74 103,-102.74 99.5,-112.74 106.5,-112.74"/>
 </g>
 <!-- coeffs -->
 <g id="node5" class="node">
@@ -90,39 +90,11 @@
 <!-- coeffs&#45;&gt;pred_spectrum -->
 <g id="edge5" class="edge">
 <title>coeffs&#45;&gt;pred_spectrum</title>
-<path fill="none" stroke="black" d="M213.73,-304C189.09,-304 164.45,-304 164.45,-304 164.45,-304 164.45,-220.96 164.45,-220.96"/>
-<polygon fill="black" stroke="black" points="167.95,-220.96 164.45,-210.96 160.95,-220.96 167.95,-220.96"/>
-</g>
-<!-- H_amplitude -->
-<g id="node6" class="node">
-<title>H_amplitude</title>
-<ellipse fill="none" stroke="black" cx="659" cy="-425.5" rx="75.48" ry="42.25"/>
-<text text-anchor="middle" x="659" y="-438.07" font-family="Times,serif" font-size="14.00">H_amplitude</text>
-<text text-anchor="middle" x="659" y="-420.82" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="659" y="-403.57" font-family="Times,serif" font-size="14.00">HalfNormal</text>
-</g>
-<!-- H_amplitude&#45;&gt;pred_spectrum -->
-<g id="edge6" class="edge">
-<title>H_amplitude&#45;&gt;pred_spectrum</title>
-<path fill="none" stroke="black" d="M708.38,-393.24C708.38,-330.26 708.38,-197 708.38,-197 708.38,-197 193.97,-197 193.97,-197"/>
-<polygon fill="black" stroke="black" points="193.97,-193.5 183.97,-197 193.97,-200.5 193.97,-193.5"/>
-</g>
-<!-- He_amplitude -->
-<g id="node11" class="node">
-<title>He_amplitude</title>
-<polygon fill="none" stroke="black" points="699.5,-334.87 584.5,-334.87 584.5,-275.12 699.5,-275.12 699.5,-334.87"/>
-<text text-anchor="middle" x="642" y="-317.57" font-family="Times,serif" font-size="14.00">He_amplitude</text>
-<text text-anchor="middle" x="642" y="-300.32" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="642" y="-283.07" font-family="Times,serif" font-size="14.00">Deterministic</text>
-</g>
-<!-- H_amplitude&#45;&gt;He_amplitude -->
-<g id="edge7" class="edge">
-<title>H_amplitude&#45;&gt;He_amplitude</title>
-<path fill="none" stroke="black" d="M642,-384.03C642,-384.03 642,-346.64 642,-346.64"/>
-<polygon fill="black" stroke="black" points="645.5,-346.64 642,-336.64 638.5,-346.64 645.5,-346.64"/>
+<path fill="none" stroke="black" d="M238.59,-268C215.08,-268 183.08,-268 183.08,-268 183.08,-268 183.08,-207.88 183.08,-207.88"/>
+<polygon fill="black" stroke="black" points="186.58,-207.88 183.08,-197.88 179.58,-207.88 186.58,-207.88"/>
 </g>
 <!-- H_center -->
-<g id="node7" class="node">
+<g id="node6" class="node">
 <title>H_center</title>
 <ellipse fill="none" stroke="black" cx="933" cy="-425.5" rx="56.92" ry="42.25"/>
 <text text-anchor="middle" x="933" y="-438.07" font-family="Times,serif" font-size="14.00">H_center</text>
@@ -130,7 +102,7 @@
 <text text-anchor="middle" x="933" y="-403.57" font-family="Times,serif" font-size="14.00">Normal</text>
 </g>
 <!-- H_center&#45;&gt;pred_spectrum -->
-<g id="edge8" class="edge">
+<g id="edge6" class="edge">
 <title>H_center&#45;&gt;pred_spectrum</title>
 <path fill="none" stroke="black" d="M976.34,-397.46C976.34,-327.17 976.34,-149 976.34,-149 976.34,-149 176.27,-149 176.27,-149"/>
 <polygon fill="black" stroke="black" points="176.27,-145.5 166.27,-149 176.27,-152.5 176.27,-145.5"/>
@@ -144,10 +116,38 @@
 <text text-anchor="middle" x="906" y="-283.07" font-family="Times,serif" font-size="14.00">Deterministic</text>
 </g>
 <!-- H_center&#45;&gt;He_center -->
-<g id="edge9" class="edge">
+<g id="edge7" class="edge">
 <title>H_center&#45;&gt;He_center</title>
 <path fill="none" stroke="black" d="M919.41,-384.03C919.41,-384.03 919.41,-346.64 919.41,-346.64"/>
 <polygon fill="black" stroke="black" points="922.91,-346.64 919.41,-336.64 915.91,-346.64 922.91,-346.64"/>
+</g>
+<!-- H_amplitude -->
+<g id="node7" class="node">
+<title>H_amplitude</title>
+<ellipse fill="none" stroke="black" cx="659" cy="-425.5" rx="75.48" ry="42.25"/>
+<text text-anchor="middle" x="659" y="-438.07" font-family="Times,serif" font-size="14.00">H_amplitude</text>
+<text text-anchor="middle" x="659" y="-420.82" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="659" y="-403.57" font-family="Times,serif" font-size="14.00">HalfNormal</text>
+</g>
+<!-- H_amplitude&#45;&gt;pred_spectrum -->
+<g id="edge8" class="edge">
+<title>H_amplitude&#45;&gt;pred_spectrum</title>
+<path fill="none" stroke="black" d="M708.38,-393.24C708.38,-330.26 708.38,-197 708.38,-197 708.38,-197 193.97,-197 193.97,-197"/>
+<polygon fill="black" stroke="black" points="193.97,-193.5 183.97,-197 193.97,-200.5 193.97,-193.5"/>
+</g>
+<!-- He_amplitude -->
+<g id="node10" class="node">
+<title>He_amplitude</title>
+<polygon fill="none" stroke="black" points="699.5,-334.87 584.5,-334.87 584.5,-275.12 699.5,-275.12 699.5,-334.87"/>
+<text text-anchor="middle" x="642" y="-317.57" font-family="Times,serif" font-size="14.00">He_amplitude</text>
+<text text-anchor="middle" x="642" y="-300.32" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="642" y="-283.07" font-family="Times,serif" font-size="14.00">Deterministic</text>
+</g>
+<!-- H_amplitude&#45;&gt;He_amplitude -->
+<g id="edge9" class="edge">
+<title>H_amplitude&#45;&gt;He_amplitude</title>
+<path fill="none" stroke="black" d="M642,-384.03C642,-384.03 642,-346.64 642,-346.64"/>
+<polygon fill="black" stroke="black" points="645.5,-346.64 642,-336.64 638.5,-346.64 645.5,-346.64"/>
 </g>
 <!-- He_center&#45;&gt;pred_spectrum -->
 <g id="edge10" class="edge">
@@ -170,7 +170,7 @@
 <polygon fill="black" stroke="black" points="200.86,-169.5 190.86,-173 200.86,-176.5 200.86,-169.5"/>
 </g>
 <!-- He_fwhm -->
-<g id="node10" class="node">
+<g id="node11" class="node">
 <title>He_fwhm</title>
 <polygon fill="none" stroke="black" points="830.75,-334.87 717.25,-334.87 717.25,-275.12 830.75,-275.12 830.75,-334.87"/>
 <text text-anchor="middle" x="774" y="-317.57" font-family="Times,serif" font-size="14.00">He_fwhm</text>
@@ -183,17 +183,17 @@
 <path fill="none" stroke="black" d="M791.54,-384.37C791.54,-384.37 791.54,-346.81 791.54,-346.81"/>
 <polygon fill="black" stroke="black" points="795.04,-346.81 791.54,-336.81 788.04,-346.81 795.04,-346.81"/>
 </g>
-<!-- He_fwhm&#45;&gt;pred_spectrum -->
-<g id="edge13" class="edge">
-<title>He_fwhm&#45;&gt;pred_spectrum</title>
-<path fill="none" stroke="black" d="M774,-274.72C774,-239.17 774,-185 774,-185 774,-185 201.2,-185 201.2,-185"/>
-<polygon fill="black" stroke="black" points="201.2,-181.5 191.2,-185 201.2,-188.5 201.2,-181.5"/>
-</g>
 <!-- He_amplitude&#45;&gt;pred_spectrum -->
-<g id="edge14" class="edge">
+<g id="edge13" class="edge">
 <title>He_amplitude&#45;&gt;pred_spectrum</title>
 <path fill="none" stroke="black" d="M642,-274.62C642,-246.5 642,-209 642,-209 642,-209 177.4,-209 177.4,-209"/>
 <polygon fill="black" stroke="black" points="177.4,-205.5 167.4,-209 177.4,-212.5 177.4,-205.5"/>
+</g>
+<!-- He_fwhm&#45;&gt;pred_spectrum -->
+<g id="edge14" class="edge">
+<title>He_fwhm&#45;&gt;pred_spectrum</title>
+<path fill="none" stroke="black" d="M774,-274.72C774,-239.17 774,-185 774,-185 774,-185 201.2,-185 201.2,-185"/>
+<polygon fill="black" stroke="black" points="201.2,-181.5 191.2,-185 201.2,-188.5 201.2,-181.5"/>
 </g>
 <!-- yplus -->
 <g id="node12" class="node">
@@ -217,17 +217,17 @@
 <text text-anchor="middle" x="465" y="-420.82" font-family="Times,serif" font-size="14.00">~</text>
 <text text-anchor="middle" x="465" y="-403.57" font-family="Times,serif" font-size="14.00">TruncatedNormal</text>
 </g>
-<!-- He_H_fwhm_ratio&#45;&gt;He_fwhm -->
-<g id="edge16" class="edge">
-<title>He_H_fwhm_ratio&#45;&gt;He_fwhm</title>
-<path fill="none" stroke="black" d="M431.53,-385.48C431.53,-374.23 431.53,-365 431.53,-365 431.53,-365 725.87,-365 725.87,-365 725.87,-365 725.87,-346.86 725.87,-346.86"/>
-<polygon fill="black" stroke="black" points="729.37,-346.86 725.87,-336.86 722.37,-346.86 729.37,-346.86"/>
-</g>
 <!-- He_H_fwhm_ratio&#45;&gt;He_amplitude -->
-<g id="edge17" class="edge">
+<g id="edge16" class="edge">
 <title>He_H_fwhm_ratio&#45;&gt;He_amplitude</title>
 <path fill="none" stroke="black" d="M498.47,-385.24C498.47,-353.31 498.47,-314 498.47,-314 498.47,-314 572.52,-314 572.52,-314"/>
 <polygon fill="black" stroke="black" points="572.52,-317.5 582.52,-314 572.52,-310.5 572.52,-317.5"/>
+</g>
+<!-- He_H_fwhm_ratio&#45;&gt;He_fwhm -->
+<g id="edge17" class="edge">
+<title>He_H_fwhm_ratio&#45;&gt;He_fwhm</title>
+<path fill="none" stroke="black" d="M431.53,-385.48C431.53,-374.23 431.53,-365 431.53,-365 431.53,-365 725.87,-365 725.87,-365 725.87,-365 725.87,-346.86 725.87,-346.86"/>
+<polygon fill="black" stroke="black" points="729.37,-346.86 725.87,-336.86 722.37,-346.86 729.37,-346.86"/>
 </g>
 </g>
 </svg>
