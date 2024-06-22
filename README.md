@@ -39,7 +39,7 @@ pip install -e .
 
 `mcmc_yplus` assumes that the RRL emission can be decomposed into a series of Gaussian components where the helium abundance `yplus` and the helium-to-hydrogen line-width ratio `He_H_fwhm_ratio` are assumed constant across all components. Furthermore, we assume that the helium line is fixed -122.15 km/s from the hydrogen line. The following diagram demonstrates the relationship between the free parameters (empty ellipses), deterministic quantities (rectangles), model predictions (filled ellipses), and observations (filled, round rectangles). The `cloud (2)` and `coeff(4)` sub-clusters represent the parameter groups for this two-cloud (`n_cloud=2`), 3rd order polynomial baseline (`baseline_degree=3`) model. The `vel (1000)` sub-cluster represents the spectral data. The subsequent tables describe the model parameters in more detail.
 
-![model graph](example/figures/model.gv.svg)
+![model graph](examples/figures/model.gv.svg)
 
 | Observations | Data                             | Units    | Dimension | Comment                |
 | :----------- | :------------------------------- | :------- | :-------- | :--------------------- |
