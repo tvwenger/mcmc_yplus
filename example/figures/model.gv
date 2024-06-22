@@ -1,0 +1,110 @@
+digraph {
+	graph [newrank=false,
+		rankdir=TB,
+		splines=ortho
+	];
+	subgraph "clustervel (1000)" {
+		graph [label="vel (1000)",
+			labeljust=r,
+			labelloc=b,
+			style=rounded
+		];
+		spectrum	[label="spectrum
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		pred_spectrum	[label="pred_spectrum
+~
+Normal",
+			shape=ellipse,
+			style=filled];
+		velocity	[label="velocity
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		velocity	[label="velocity
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		noise	[label="noise
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		spectrum	[label="spectrum
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+	}
+	subgraph "clustercoeff (4)" {
+		graph [label="coeff (4)",
+			labeljust=r,
+			labelloc=b,
+			style=rounded
+		];
+		coeffs	[label="coeffs
+~
+Normal",
+			shape=ellipse];
+	}
+	subgraph "clustercloud (2)" {
+		graph [label="cloud (2)",
+			labeljust=r,
+			labelloc=b,
+			style=rounded
+		];
+		H_amplitude	[label="H_amplitude
+~
+HalfNormal",
+			shape=ellipse];
+		H_center	[label="H_center
+~
+Normal",
+			shape=ellipse];
+		He_center	[label="He_center
+~
+Deterministic",
+			shape=box];
+		H_fwhm	[label="H_fwhm
+~
+Gamma",
+			shape=ellipse];
+		He_fwhm	[label="He_fwhm
+~
+Deterministic",
+			shape=box];
+		He_amplitude	[label="He_amplitude
+~
+Deterministic",
+			shape=box];
+	}
+	pred_spectrum -> spectrum	[minlen=1];
+	velocity -> pred_spectrum	[minlen=1];
+	velocity -> pred_spectrum	[minlen=2];
+	noise -> pred_spectrum	[minlen=3];
+	coeffs -> pred_spectrum	[minlen=1];
+	H_amplitude -> pred_spectrum;
+	H_amplitude -> He_amplitude;
+	H_center -> pred_spectrum;
+	H_center -> He_center;
+	He_center -> pred_spectrum;
+	H_fwhm -> pred_spectrum;
+	H_fwhm -> He_fwhm;
+	He_fwhm -> pred_spectrum;
+	He_amplitude -> pred_spectrum;
+	yplus	[label="yplus
+~
+HalfNormal",
+		shape=ellipse];
+	yplus -> He_amplitude	[minlen=1];
+	He_H_fwhm_ratio	[label="He_H_fwhm_ratio
+~
+TruncatedNormal",
+		shape=ellipse];
+	He_H_fwhm_ratio -> He_fwhm;
+	He_H_fwhm_ratio -> He_amplitude;
+}

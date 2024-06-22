@@ -1,0 +1,10 @@
+name: mcmc_yplus
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pymc>=5
+  - pip
+  - scipy
+  - scikit-learn
+  - graphviz

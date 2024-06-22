@@ -1,262 +1,101 @@
-# mcmc_yplus
-Infer helium abundance and other parameters for a RRL spectrum using MCMC.
+# mcmc_yplus <!-- omit in toc -->
+A Bayesian model to infer helium abundances from radio recombination line (RRL) spectra.
 
-Given a RRL spectrum, `mcmc_yplus` uses a Monte Carlo Markov Chain analysis
-to infer optimal number of Gaussian components and their parameters, including
-the helium RRL line width and `yplus`, the helium to hydrogen abundance ratio
-by number. Here is a basic outline of the algorithm:
+`mcmc_yplus` fits a cloud-based model of ionized gas to RRL spectra.
 
-0. First, we calculate the Bayesian Information Criterion (BIC) over the
-data for the null hypothesis (no baseline, no Gaussian components).
+- [Installation](#installation)
+- [Model](#model)
+- [Algorithms](#algorithms)
+  - [Posterior Sampling: Variational Inference](#posterior-sampling-variational-inference)
+  - [Posterior Sampling: MCMC](#posterior-sampling-mcmc)
+  - [Posterior Clustering: Gaussian Mixture Models](#posterior-clustering-gaussian-mixture-models)
+  - [Optimization](#optimization)
+- [Syntax \& Examples](#syntax--examples)
+- [Issues and Contributing](#issues-and-contributing)
+- [License and Copyright](#license-and-copyright)
 
-1. Starting with one component, we sample the posterior distribution using
-MCMC with at least four independent Markov chains.
 
-2. Because of the degeneracies related to fitting Gaussians to data, it is
-possible that chains get stuck in a local maximum of the posterior
-distribution. This is especially likely when the number of components is less
-than the "true" number of components, in which case each chain may decide
-to fit a different subset of components. We check if the chains appear
-converged by evaluating the BIC over the data using the mean point
-estimate per chain. Any deviant chains are discarded.
-
-3. There also exists a labeling degeneracy: each chain could decide to fit the components
-in a different order. To break the degeneracy, we use a Gaussian Mixture Model (GMM)
-to cluster the posterior samples of all chains into the same number of groups as there are
-expected components. It also tests fewer and more clusters and evaluates the BIC for each
-number of clusters in order to determine how many clusters appears optimal to explain the
-posterior samples.
-
-4. Once completed, we check to see if the chains appear converged (by comparing 
-the BIC of each chain's mean point estimate to that of the combined posterior samples) and
-if the number of components seems converged (by comparing the ideal GMM cluster count to
-the model number of components). If both convergence checks are passed, then we
-stop.
-
-5. We also check to see if there were any divergences in the posterior sampling.
-Divergences indicate that the model number of components exceeds the true
-number of components present in the data. If there are divergences, then we 
-stop.
-
-6. If the BIC of the mean point estimate has decreased compared to the previous iteration,
-then we increment the number of Gaussian components by one and continue.
-
-7. If the BIC of the mean point estimate increases two iterations in a row, then we stop.
-
-## Installation
-```bash
-conda create --name mcmc_yplus -c conda-forge pymc
+# Installation
+Preferred: install in a `conda` virtual environment:
+```
+conda env create -f environment.yml
 conda activate mcmc_yplus
-pip install git+https://github.com/tvwenger/mcmc_yplus.git
+pip install .
 ```
 
-## Usage
-In general, try `help(function)` for a thorough explanation of
-parameters, return values, and other information related to `function`.
-
-### Single model demonstration
-
-If the number of spectral components is known or assumed a prior, then
-a single model may be fit.
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-from mcmc_yplus.model import Model
-
-rng = np.random.RandomState(seed=1234)
-
-# create some synthetic data
-poly_coeffs = [1.0e-7, -2.0e-6, 0.0, -2.5]
-H_centers = [-15.0, 20.0]
-H_fwhms = [30.0, 35.0]
-H_peaks = [10.0, 20.0]
-He_H_fwhm_ratio = 0.9
-yplus = 0.08
-He_offset = 122.15
-
-channel = np.linspace(-300.0, 200.0, 1000)
-rms = 1.0
-spectrum = rng.normal(loc=0.0, scale=rms, size=1000)
-spectrum += np.polyval(poly_coeffs, channel)
-for H_center, H_fwhm, H_peak in zip(H_centers, H_fwhms, H_peaks):
-    # H component
-    H_sigma = H_fwhm / (2.0 * np.sqrt(2.0 * np.log(2.0)))
-    spectrum += H_peak * np.exp(-0.5 * (channel - H_center)**2.0 / H_sigma**2.0)
-    
-    # He component
-    He_peak = H_peak * yplus / He_H_fwhm_ratio
-    He_sigma = H_sigma * He_H_fwhm_ratio
-    He_center = H_center - He_offset
-    spectrum += He_peak * np.exp(-0.5 * (channel - He_center)**2.0 / He_sigma**2.0)
-
-# The H components are expected to be near channel ~ 0, so we normalize
-# the channel range here. We also normalize the spectrum for good measure.
-channel_range = np.max(channel) - np.min(channel)
-norm_channel = channel / channel_range
-norm_He_offset = He_offset / channel_range
-spectral_range = np.max(spectrum) - np.min(spectrum)
-norm_spectrum = spectrum / spectral_range
-norm_rms = rms / spectral_range
-
-plt.plot(norm_channel, norm_spectrum, 'k-')
-plt.xlabel("Normalized Channel")
-plt.ylabel("Normalized Brightness")
-plt.tight_layout()
-plt.show()
+Alternatively:
+```
+python setup.py install
 ```
 
-![Synthetic Data](https://raw.githubusercontent.com/tvwenger/mcmc_yplus/main/example/spectrum.png)
-
-```python
-# initialize the model
-model = Model(
-    2, # number of Gaussian components
-    n_poly = 4, # number of baseline polynomial coefficients (i.e., order + 1)
-    seed = 1234, # random seed
-    verbose = True, # print information
-)
-
-# set data. data is a dictionary containing:
-# data['channel'] :: 1-D array spectral axis definition
-# data['obs_spectrum'] :: 1-D array brightness spectrum
-# data['rms'] :: estimated spectral rms
-# data['he_offset'] :: channel(H) - channel(He)
-data = {
-    'channel': norm_channel,
-    'obs_spectrum': norm_spectrum,
-    'rms': norm_rms,
-    'he_offset': norm_He_offset,
-}
-model.set_data(data)
-
-# Set prior distribution shapes. The prior distribution for each parameter
-# is either a half-normal (for positive-definite parameters) or normal
-# (otherwise) distribution. The values supplied here set the standard deviation of
-# those posterior distributions.
-model.set_priors(
-    prior_coeffs = 0.1, # baseline coefficient(s)
-    prior_amplitude = 0.5, # normalized Gaussian amplitude(s)
-    prior_center = 0.05, # normalized Gaussian center(s)
-    prior_fwhm = 0.1, # normalized Gaussian FWHM(s)
-    prior_yplus = 0.1, # He/H abundance by number
-    prior_He_H_fwhm_ratio = 1.0, # He/H FWHM ratio
-)
-
-# Add the likelihood to the model
-model.add_likelihood()
-
-# Generate prior predictive samples to test the prior distribution validity
-prior_predictive = model.prior_predictive_check(
-    samples=50, plot_fname="prior_predictive.png"
-)
-
-# Sample the posterior distribution with 4 chains and 4 CPUs
-# using 1000 tuning iterations and then drawing 1000 samples
-model.fit(init="adapt_diag", tune=500, draws=500, chains=4, cores=4)
-
-# Plot the posterior sample chains
-model.plot_traces("traces.png")
-
-# Generate posterior predictive samples to check posterior inference
-# thin = keep only every 50th posterior sample
-posterior_predictive = model.posterior_predictive_check(
-    thin=50, plot_fname="posterior_predictive.png"
-)
-
-# Plot the marginalized posterior samples. One plot is created
-# per component (named corner_0.png, corner_1.png, etc. in this example),
-# one plot is created for the component-combined posterior
-# (named corner.png in this example), and one plot is created for the
-# non-Gaussian parameters (baseline coefficients, yplus, and FWHM
-# ratio; named corner_other.png in this example)
-model.plot_corner("corner.png")
-
-# Get the posterior point estimate mean, standard deviation,
-# and 68% highest density interval
-summary = model.point_estimate(stats=["mean", "std", "hdi"], hdi_prob=0.68)
-print(summary['yplus'])
-# {'mean': 0.09030119943455478, 'std': 0.009608247252565578, 'hdi': array([0.08118078, 0.09960042])}
+If you wish to contribute to `mcmc_yplus`, then you may wish to install additional dependencies and install `mcmc_yplus` as an "editable" package:
+```
+conda env create -f environment-dev.yml
+conda activate mcmc_yplus-dev
+pip install -e .
 ```
 
-![Prior Predictive](https://raw.githubusercontent.com/tvwenger/mcmc_yplus/main/example/prior_predictive.png)
+# Model
 
-![Posterior Predictive](https://raw.githubusercontent.com/tvwenger/mcmc_yplus/main/example/posterior_predictive.png)
+`mcmc_yplus` assumes that the RRL emission can be decomposed into a series of Gaussian components where the helium abundance `yplus` and the helium-to-hydrogen line-width ratio `He_H_fwhm_ratio` are assumed constant across all components. Furthermore, we assume that the helium line is fixed -122.15 km/s from the hydrogen line. The following diagram demonstrates the relationship between the free parameters (empty ellipses), deterministic quantities (rectangles), model predictions (filled ellipses), and observations (filled, round rectangles). The `cloud (2)` and `coeff(4)` sub-clusters represent the parameter groups for this two-cloud (`n_cloud=2`), 3rd order polynomial baseline (`baseline_degree=3`) model. The `vel (1000)` sub-cluster represents the spectral data. The subsequent tables describe the model parameters in more detail.
 
-![Corner](https://raw.githubusercontent.com/tvwenger/mcmc_yplus/main/example/corner_other.png)
+![model graph](example/figures/model.gv.svg)
 
-### Inferring number of components
+| Observations | Data                             | Units    | Dimension | Comment                |
+| :----------- | :------------------------------- | :------- | :-------- | :--------------------- |
+| `velocity`   | Velocity axis                    | `km s-1` | `vel`     |                        |
+| `noise`      | Channel-dependent spectral noise | `K`      | `vel`     | Brightness temperature |
+| `spectrum`   | RRL spectrum                     | `K`      | `vel`     | Brightness temperature |
 
-If the number of Gaussian features is not known, then `mcmc_yplus` can
-iterate through different models and use various measures to determine
-the optimal number of components. The `OptimizeModel` class creates
-one model for each possible number of components. The syntax for
-adding data, priors, and likelihoods to the optimizer is similar to
-that of a single model.
+| Free Parameter<br>`variable` | Quantity                 | Units    | Dimension | Prior, where<br>$(p_0, p_1, ...)$ = `prior_{variable}`                 | Default<br>`prior_{variable}` |
+| :--------------------------- | :----------------------- | :------- | :-------: | ---------------------------------------------------------------------- |
+| `H_amplitude`                | H RRL amplitude          | `K`      |  `cloud`  | $T_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$                          | `[100.0]`                     |
+| `H_center`                   | H RRL center velocity    | `km s-1` |  `cloud`  | $V_{\rm H} \sim {\rm Normal}(\mu=p_0, \sigma=p_1)$                     | `[0.0, 10.0]`                 |
+| `H_center`                   | H RRL center velocity    | `km s-1` |  `cloud`  | $V_{\rm H} \sim {\rm Normal}(\mu=p_0, \sigma=p_1)$                     | `[0.0, 10.0]`                 |
+| `H_fwhm`                     | H RRL FWHM line width    | `km s-1` |  `cloud`  | $\Delta V_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$                   | `[20.0]`                      |
+| `yplus`                      | Helium abundance         |          |           | $y^+ \sim {\rm HalfNormal}(\sigma=p_0)$                                | `[0.1]`                       |
+| `He_H_fwhm_ratio`            | He-to-H line width ratio |          |           | $\Delta V_{\rm He}/\Delta V_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$ | `[1.0]`                       |
 
-```python
-from mcmc_yplus.optimize import OptimizeModel
+| Deterministic Quantity<br>(dimension `cloud`) | Quantity               | Units    | Relationship                                                                |
+| :-------------------------------------------- | :--------------------- | :------- | :-------------------------------------------------------------------------- |
+| `He_amplitude`                                | He RRL amplitude       | `K`      | $T_{\rm He} = T_{\rm H} y^+/(\Delta V_{\rm He}/\Delta V_{\rm H})$           |
+| `He_center`                                   | He RRL center velocity | `km s-1` | $V_{\rm He} = V_{\rm H} - 122.15$                                           |
+| `He_fwhm`                                     | He RRL FWHM line width | `km s-1` | $\Delta V_{\rm He} = \Delta V_{\rm H} (\Delta V_{\rm He}/\Delta V_{\rm H})$ |
 
-# initialize the model optimizer
-optimizer = OptimizeModel(
-    max_n_gauss = 5, # maximum number of Gaussian components
-    n_poly = 4, # number of baseline polynomial coefficients (i.e., order + 1)
-    seed = 1234, # random seed
-    verbose = True, # print information
-)
+# Algorithms
 
-# add data to each model. data is a dictionary containing:
-# data['channel'] :: 1-D array spectral axis definition
-# data['obs_spectrum'] :: 1-D array brightness spectrum
-optimizer.set_data(data)
+## Posterior Sampling: Variational Inference
 
-# Set prior distribution shapes. The prior distribution for each parameter
-# is either a half-normal (for positive-definite parameters) or normal
-# (otherwise) distribution. The values supplied here set the standard deviation of
-# those parameter posterior distributions.
-optimizer.set_priors(
-    prior_coeffs = 0.1, # baseline coefficient(s)
-    prior_amplitude = 0.5, # normalized Gaussian amplitude(s)
-    prior_center = 0.05, # normalized Gaussian center(s)
-    prior_fwhm = 0.1, # normalized Gaussian FWHM(s)
-    prior_yplus = 0.1, # He/H abundance by number
-    prior_He_H_fwhm_ratio = 1.0, # He/H FWHM ratio
-)
+`mcmc_yplus` can sample from an approximation of model posterior distribution using [variational inference (VI)](https://www.pymc.io/projects/examples/en/latest/variational_inference/variational_api_quickstart.html). The benefit of VI is that it is fast, but the downside is that it often fails to capture complex posterior topologies. We recommend only using VI for quick model tests or MCMC initialization. Draw posterior samples using VI via `model.fit()`.
 
-# Add the likelihood to the models
-optimizer.add_likelihood()
-```
+## Posterior Sampling: MCMC
 
-Now we iterate over the models to sample the posterior distributions
-starting with one Gaussian component. After each model, we compute the
-BIC, check for divergences, and check that the chains and GMM clusters
-appear converged.
+`mcmc_yplus` can also use MCMC to sample the posterior distribution. MCMC sampling tends to be much slower but also more accurate. Draw posterior samples using MCMC via `model.sample()`.
 
-```python
-optimizer.fit_all(init="adapt_diag", tune=500, draws=500, chains=4, cores=4)
-```
+## Posterior Clustering: Gaussian Mixture Models
 
-The "best" model -- the model with the lowest BIC before divergences
-or other convergence checks fail -- is saved in `optimizer.best_model`.
+Assuming that we have drawn posterior samples via MCMC using multiple independent Markov chains, then it is possible that each chain disagrees on the order of clouds. This is known as the labeling degeneracy. For optically thin radiative transfer, the order of clouds along the line-of-sight is arbitrary so each chain may converge to a different label order.
 
-```python
-print(optimizer.best_model.n_gauss)
-# 2
-posterior_predictive = optimizer.best_model.posterior_predictive_check(
-    thin=50, plot_fname="posterior_predictive.png"
-)
-optimizer.best_model.plot_corner("corner.png")
-```
+It is also possible that the model solution is degenerate, the posterior distribution is strongly multi-modal, and each chain converges to different, unique solutions.
 
-## Issues and Contributing
+`mcmc_yplus` uses Gaussian Mixture Models (GMMs) to break the labeling degeneracy and identify unique solutions. After sampling, execute `model.solve()` to fit a GMM to the posterior samples of each chain individually. Unique solutions are identified by discrepant GMM fits, and we break the labeling degeneracy by adopting the most common cloud order amongst chains.
+
+## Optimization
+
+`mcmc_yplus` can optimize the number of clouds in addition to the other model parameters. The `Optimize` class will use VI to estimate the preferred number of clouds, and then sample the "best" model with MCMC.
+
+# Syntax & Examples
+
+See the various notebooks under [examples](https://github.com/tvwenger/mcmc_yplus/tree/main/examples).
+
+# Issues and Contributing
 
 Anyone is welcome to submit issues or contribute to the development
 of this software via [Github](https://github.com/tvwenger/mcmc_yplus).
 
-## License and Copyright
+# License and Copyright
 
-Copyright (c) 2023 Trey Wenger
+Copyright (c) 2023-2024 Trey Wenger
 
 GNU General Public License v3 (GNU GPLv3)
 
@@ -272,3 +111,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
