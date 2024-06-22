@@ -235,16 +235,16 @@ class Model:
         """
         # fit polynomial baseline
         baseline = Polynomial.fit(
-            self.data["velocity"],
-            self.data["spectrum"],
+            self.data["velocity_norm"],
+            self.data["spectrum_norm"],
             self.baseline_degree,
-        )(self.data["velocity"])
+        )(self.data["velocity_norm"])
 
         # evaluate likelihood
-        emission = self.data["spectrum"] - baseline
-        lnlike = norm.logpdf(emission, scale=self.data["noise"]).sum()
+        emission = self.data["spectrum_norm"] - baseline
+        lnlike = norm.logpdf(emission).sum()
 
-        n_params = 2 * (self.baseline_degree + 1)
+        n_params = self.baseline_degree + 1
         return n_params * np.log(self._n_data) - 2.0 * lnlike
 
     def lnlike_mean_point_estimate(self, chain: int = None, solution: int = None):
@@ -548,7 +548,7 @@ class Model:
     def sample(
         self,
         init: str = "advi+adapt_diag",
-        n_init: int = 500_000,
+        n_init: int = 100_000,
         chains: int = 4,
         init_kwargs: dict = None,
         nuts_kwargs: dict = None,
