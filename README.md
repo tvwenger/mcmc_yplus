@@ -47,14 +47,13 @@ pip install -e .
 | `noise`      | Channel-dependent spectral noise | `K`      | `vel`     | Brightness temperature |
 | `spectrum`   | RRL spectrum                     | `K`      | `vel`     | Brightness temperature |
 
-| Free Parameter<br>`variable` | Quantity                 | Units    | Dimension | Prior, where<br>$(p_0, p_1, ...)$ = `prior_{variable}`                 | Default<br>`prior_{variable}` |
-| :--------------------------- | :----------------------- | :------- | :-------: | ---------------------------------------------------------------------- |
-| `H_amplitude`                | H RRL amplitude          | `K`      |  `cloud`  | $T_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$                          | `[100.0]`                     |
-| `H_center`                   | H RRL center velocity    | `km s-1` |  `cloud`  | $V_{\rm H} \sim {\rm Normal}(\mu=p_0, \sigma=p_1)$                     | `[0.0, 10.0]`                 |
-| `H_center`                   | H RRL center velocity    | `km s-1` |  `cloud`  | $V_{\rm H} \sim {\rm Normal}(\mu=p_0, \sigma=p_1)$                     | `[0.0, 10.0]`                 |
-| `H_fwhm`                     | H RRL FWHM line width    | `km s-1` |  `cloud`  | $\Delta V_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$                   | `[20.0]`                      |
-| `yplus`                      | Helium abundance         |          |           | $y^+ \sim {\rm HalfNormal}(\sigma=p_0)$                                | `[0.1]`                       |
-| `He_H_fwhm_ratio`            | He-to-H line width ratio |          |           | $\Delta V_{\rm He}/\Delta V_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$ | `[1.0]`                       |
+| Free Parameter<br>`variable` | Quantity                 | Units    | Dimension | Prior, where<br>$(p_0, p_1, ...)$ = `prior_{variable}`                                             | Default<br>`prior_{variable}` |
+| :--------------------------- | :----------------------- | :------- | :-------: | -------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `H_amplitude`                | H RRL amplitude          | `K`      |  `cloud`  | $T_{\rm H} \sim {\rm HalfNormal}(\sigma=p_0)$                                                      | `[100.0]`                     |
+| `H_center`                   | H RRL center velocity    | `km s-1` |  `cloud`  | $V_{\rm H} \sim {\rm Normal}(\mu=p_0, \sigma=p_1)$                                                 | `[0.0, 10.0]`                 |
+| `H_fwhm`                     | H RRL FWHM line width    | `km s-1` |  `cloud`  | $\Delta V_{\rm H} \sim {\rm Gamma}(\alpha=2, \beta=1/p_0)$                                         | `[20.0]`                      |
+| `yplus`                      | Helium abundance         |          |           | $y^+ \sim {\rm HalfNormal}(\sigma=p_0)$                                                            | `[0.1]`                       |
+| `He_H_fwhm_ratio`            | He-to-H line width ratio |          |           | $\Delta V_{\rm He}/\Delta V_{\rm H} \sim {\rm TruncatedNormal}(\mu=1, \sigma=p_0, \text{lower}=0)$ | `[0.1]`                       |
 
 | Deterministic Quantity<br>(dimension `cloud`) | Quantity               | Units    | Relationship                                                                |
 | :-------------------------------------------- | :--------------------- | :------- | :-------------------------------------------------------------------------- |

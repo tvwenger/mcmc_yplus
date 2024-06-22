@@ -365,7 +365,7 @@ class Model:
         prior_H_center: list[float] = [0.0, 10.0],
         prior_H_fwhm: float = 20.0,
         prior_yplus: float = 0.1,
-        prior_He_H_fwhm_ratio: float = 1.0,
+        prior_He_H_fwhm_ratio: float = 0.1,
     ):
         """
         Add priors to model.
@@ -380,7 +380,8 @@ class Model:
             prior_yplus :: scalar
                 Width of the half-normal prior distribution on y+
             prior_He_H_fwhm_ratio :: scalar
-                Width of the unity-centered normal prior distribution on the He/H FWHM ratio
+                Width of the unity-centered, truncated normal prior distribution
+                on the He/H FWHM ratio
 
         Returns: Nothing
         """
