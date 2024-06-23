@@ -136,7 +136,17 @@ class Optimize:
 
         # get best model
         model_bics = np.array(
-            [self.models[n_cloud].bic(solution=0) for n_cloud in self.n_clouds]
+            [
+                (
+                    self.models[n_cloud].bic(solution=0)
+                    if (
+                        self.models[n_cloud].solutions is not None
+                        and len(self.models[n_cloud].solutions) > 0
+                    )
+                    else np.inf
+                )
+                for n_cloud in self.n_clouds
+            ]
         )
         best_n_clouds = self.n_clouds[
             np.where(model_bics < (np.nanmin(model_bics) + bic_threshold))[0][0]
