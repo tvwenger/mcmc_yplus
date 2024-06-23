@@ -110,9 +110,12 @@ class Optimize:
             self.models[n_cloud].fit(**kwargs)
             self.models[n_cloud].solve()
             if self.verbose:
-                print(
-                    f"n_cloud = {n_cloud} BIC = {self.models[n_cloud].bic(solution=0):.3e}"
-                )
+                for solution in self.models[n_cloud].solutions:
+                    print(
+                        f"n_cloud = {n_cloud} "
+                        + f"solution = {solution} "
+                        + f"BIC = {self.models[n_cloud].bic(solution=solution):.3e}"
+                    )
                 print()
 
     def optimize(self, bic_threshold: float = 10.0, fit_kwargs={}, sample_kwargs={}):
@@ -139,10 +142,7 @@ class Optimize:
             [
                 (
                     self.models[n_cloud].bic(solution=0)
-                    if (
-                        self.models[n_cloud].solutions is not None
-                        and len(self.models[n_cloud].solutions) > 0
-                    )
+                    if len(self.models[n_cloud].solutions) > 0
                     else np.inf
                 )
                 for n_cloud in self.n_clouds
