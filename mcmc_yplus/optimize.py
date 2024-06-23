@@ -110,7 +110,9 @@ class Optimize:
             self.models[n_cloud].fit(**kwargs)
             self.models[n_cloud].solve()
             if self.verbose:
-                print(f"n_cloud = {n_cloud} BIC = {self.models[n_cloud].bic():.3e}")
+                print(
+                    f"n_cloud = {n_cloud} BIC = {self.models[n_cloud].bic(solution=0):.3e}"
+                )
                 print()
 
     def optimize(self, bic_threshold: float = 10.0, fit_kwargs={}, sample_kwargs={}):
@@ -133,7 +135,9 @@ class Optimize:
         self.fit_all(**fit_kwargs)
 
         # get best model
-        model_bics = np.array([self.models[n_cloud].bic() for n_cloud in self.n_clouds])
+        model_bics = np.array(
+            [self.models[n_cloud].bic(solution=0) for n_cloud in self.n_clouds]
+        )
         best_n_clouds = self.n_clouds[
             np.where(model_bics < (np.nanmin(model_bics) + bic_threshold))[0][0]
         ]
