@@ -118,11 +118,39 @@ class Optimize:
                     )
                 print()
 
-    def optimize(self, bic_threshold: float = 10.0, fit_kwargs={}, sample_kwargs={}):
+    def sample_all(self, **kwargs):
+        """
+        Sample posterior of all models using MCMC.
+
+        Inputs:
+            see model.sample
+
+        Returns: Nothing
+        """
+        if self.verbose:
+            print(f"Null hypothesis BIC = {self.models[1].null_bic():.3e}")
+
+        for n_cloud in self.n_clouds:
+            if self.verbose:
+                print(f"Sampling n_cloud = {n_cloud} posterior...")
+            self.models[n_cloud].sample(**kwargs)
+            self.models[n_cloud].solve()
+            if self.verbose:
+                for solution in self.models[n_cloud].solutions:
+                    print(
+                        f"n_cloud = {n_cloud} "
+                        + f"solution = {solution} "
+                        + f"BIC = {self.models[n_cloud].bic(solution=solution):.3e}"
+                    )
+                print()
+
+    def optimize(
+        self, bic_threshold: float = 10.0, fit_kwargs={}, sample_kwargs={}, approx=True
+    ):
         """
         Determine the optimal number of clouds by minimizing the BIC
-        using variational inference, and then sample the best model using
-        MCMC and solve the labeling degeneracy.
+        using MCMC, or variational inference and then sampling the best model using
+        MCMC. The labeling degeneracy is solved.
 
         Inputs:
             bic_threshold :: scalar
@@ -131,11 +159,18 @@ class Optimize:
                 Arguments passed to fit()
             sample_kwargs :: dictionary
                 Arguments passed to sample()
+            approx :: boolean
+                If True, use VI for first pass, then sample best with MCMC.
+                Otherwise, MCMC (slower, better) every model (don't set max_n_clouds too high!).
 
         Returns: Nothing
         """
-        # fit all with VI
-        self.fit_all(**fit_kwargs)
+        if approx:
+            # fit all with VI
+            self.fit_all(**fit_kwargs)
+        else:
+            # sample with MCMC
+            self.sample_all(**sample_kwargs)
 
         # get best model
         model_bics = np.array(
@@ -153,8 +188,9 @@ class Optimize:
         ]
         self.best_model = self.models[best_n_clouds]
 
-        # sample best
-        if self.verbose:
-            print(f"Sampling best model (n_cloud = {self.best_model.n_clouds})...")
-        self.best_model.sample(**sample_kwargs)
-        self.best_model.solve()
+        if approx:
+            # sample best
+            if self.verbose:
+                print(f"Sampling best model (n_cloud = {self.best_model.n_clouds})...")
+            self.best_model.sample(**sample_kwargs)
+            self.best_model.solve()
