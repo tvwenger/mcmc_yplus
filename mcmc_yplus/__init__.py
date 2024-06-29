@@ -1,4 +1,4 @@
-__version__ = "0.0.1b"
+__version__ = "0.0.2b"
 __all__ = [
     "Model",
     "Optimize",
