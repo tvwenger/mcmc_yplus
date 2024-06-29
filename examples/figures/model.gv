@@ -14,27 +14,27 @@ digraph {
 Data",
 			shape=box,
 			style="rounded, filled"];
-		noise	[label="noise
-~
-Data",
-			shape=box,
-			style="rounded, filled"];
-		spectrum	[label="spectrum
-~
-Data",
-			shape=box,
-			style="rounded, filled"];
-		velocity	[label="velocity
-~
-Data",
-			shape=box,
-			style="rounded, filled"];
 		pred_spectrum	[label="pred_spectrum
 ~
 Normal",
 			shape=ellipse,
 			style=filled];
 		velocity	[label="velocity
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		noise	[label="noise
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		velocity	[label="velocity
+~
+Data",
+			shape=box,
+			style="rounded, filled"];
+		spectrum	[label="spectrum
 ~
 Data",
 			shape=box,
@@ -57,6 +57,10 @@ Normal",
 			labelloc=b,
 			style=rounded
 		];
+		yplus	[label="yplus
+~
+HalfNormal",
+			shape=ellipse];
 		H_center	[label="H_center
 ~
 Normal",
@@ -65,13 +69,17 @@ Normal",
 ~
 HalfNormal",
 			shape=ellipse];
+		H_fwhm	[label="H_fwhm
+~
+Gamma",
+			shape=ellipse];
 		He_center	[label="He_center
 ~
 Deterministic",
 			shape=box];
-		H_fwhm	[label="H_fwhm
+		He_H_fwhm_ratio	[label="He_H_fwhm_ratio
 ~
-Gamma",
+TruncatedNormal",
 			shape=ellipse];
 		He_amplitude	[label="He_amplitude
 ~
@@ -82,29 +90,21 @@ Deterministic",
 Deterministic",
 			shape=box];
 	}
-	noise -> pred_spectrum	[minlen=1];
-	velocity -> pred_spectrum	[minlen=2];
 	pred_spectrum -> spectrum	[minlen=1];
+	velocity -> pred_spectrum	[minlen=1];
+	noise -> pred_spectrum	[minlen=2];
 	velocity -> pred_spectrum	[minlen=3];
 	coeffs -> pred_spectrum	[minlen=1];
+	yplus -> He_amplitude	[minlen=1];
 	H_center -> pred_spectrum;
 	H_center -> He_center;
 	H_amplitude -> pred_spectrum;
 	H_amplitude -> He_amplitude;
-	He_center -> pred_spectrum;
 	H_fwhm -> pred_spectrum;
 	H_fwhm -> He_fwhm;
-	He_amplitude -> pred_spectrum;
-	He_fwhm -> pred_spectrum;
-	yplus	[label="yplus
-~
-HalfNormal",
-		shape=ellipse];
-	yplus -> He_amplitude	[minlen=1];
-	He_H_fwhm_ratio	[label="He_H_fwhm_ratio
-~
-TruncatedNormal",
-		shape=ellipse];
+	He_center -> pred_spectrum;
 	He_H_fwhm_ratio -> He_amplitude;
 	He_H_fwhm_ratio -> He_fwhm;
+	He_amplitude -> pred_spectrum;
+	He_fwhm -> pred_spectrum;
 }

@@ -109,8 +109,14 @@ class Model:
 
         # Model parameters
         self.baseline_params = ["coeffs"]
-        self.hyper_params = ["yplus", "He_H_fwhm_ratio"]
-        self.cloud_params = ["H_amplitude", "H_center", "H_fwhm"]
+        self.hyper_params = []
+        self.cloud_params = [
+            "H_amplitude",
+            "H_center",
+            "H_fwhm",
+            "He_H_fwhm_ratio",
+            "yplus",
+        ]
         self.deterministics = ["He_amplitude", "He_center", "He_fwhm"]
 
         # Parameters used for posterior clustering
@@ -373,10 +379,10 @@ class Model:
         Inputs:
             prior_H_amplitude :: scalar (K)
                 Width of the half-normal prior distribution on H amplitude
-            prior_H_center :: scalar (km/s)
-                Width of the half-normal prior distribution on the H center
+            prior_H_center :: list of two scalar (km/s)
+                Center and width of the normal prior distribution on the H center
             prior_H_fwhm :: scalar (km/s)
-                Width of the k=2 Gamma prior distribution on the H FWHM
+                Mode of the k=4 Gamma prior distribution on the H FWHM
             prior_yplus :: scalar
                 Width of the half-normal prior distribution on y+
             prior_He_H_fwhm_ratio :: scalar
@@ -402,13 +408,17 @@ class Model:
                 "H_center", mu=prior_H_center[0], sigma=prior_H_center[1], dims="cloud"
             )
             H_fwhm = pm.Gamma(
-                "H_fwhm", alpha=2.0, beta=1.0 / prior_H_fwhm, dims="cloud"
+                "H_fwhm", alpha=4.0, beta=3.0 / prior_H_fwhm, dims="cloud"
             )
 
-            # hyper parameters
-            yplus = pm.HalfNormal("yplus", sigma=prior_yplus)
+            # He parameters
+            yplus = pm.HalfNormal("yplus", sigma=prior_yplus, dims="cloud")
             He_H_fwhm_ratio = pm.TruncatedNormal(
-                "He_H_fwhm_ratio", mu=1.0, sigma=prior_He_H_fwhm_ratio, lower=0.0
+                "He_H_fwhm_ratio",
+                mu=1.0,
+                sigma=prior_He_H_fwhm_ratio,
+                lower=0.0,
+                dims="cloud",
             )
 
             # Deterministic He parameters
